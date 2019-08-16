@@ -4,9 +4,8 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
-from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer, TfidfTransformer
 from sklearn.pipeline import Pipeline
-from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report, f1_score, precision_score, recall_score
 from sklearn.model_selection import cross_validate
 from imblearn.over_sampling import RandomOverSampler
@@ -131,7 +130,7 @@ class Classification_model():
     #Training function, runs only when model_training is set to True during class initialization. You can use different training data
     #as well in case you already have cleaned data and do not want to use the class function by setting Override_existing_X_y to True and 
     #passing your X_trai n & y_train parameters. It returns a pipeline which us used by test model fucntion
-    def train_model(self, X_train=None, y_train=None, Override_existing_X_y:bool = False, max_feat:int=900, inverse_regularisation:int = 70):
+    def train_model(self, X_train=None, y_train=None, Override_existing_X_y:bool = False, max_feat:int=900, inverse_regularisation:int = 70, Tf_Idf:bool=True):
         if self.model_training == True:
             try:
                 if self.X_train == None:
@@ -164,10 +163,15 @@ class Classification_model():
                 self.temp_y_train = y_train
                 
             print("Creating pipeline")
-            Log_pipeline = Pipeline([('vect', TfidfVectorizer(ngram_range=(1,2), max_features=max_feat, stop_words='english')),
-                    ('tfidf', TfidfTransformer()),
-                    ('clf', LogisticRegression(C=inverse_regularisation, dual=False, multi_class='ovr', penalty='l1', solver='saga', tol=0.001, max_iter=1500, random_state=self.RandomState))
-                   ])
+            if Tf_Idf == False:
+                Log_pipeline = Pipeline([('vect', CountVectorizer()),
+                        ('clf', LogisticRegression(C=inverse_regularisation, dual=False, multi_class='ovr', penalty='l1', solver='saga', tol=0.001, max_iter=1500, random_state=self.RandomState))
+                       ])
+            else:
+                Log_pipeline = Pipeline([('vect', TfidfVectorizer(ngram_range=(1,2), max_features=max_feat, stop_words='english')),
+                        ('tfidf', TfidfTransformer()),
+                        ('clf', LogisticRegression(C=inverse_regularisation, dual=False, multi_class='ovr', penalty='l1', solver='saga', tol=0.001, max_iter=1500, random_state=self.RandomState))
+                       ])
             self.Log_pipeline = Log_pipeline.fit(self.temp_X_train, self.temp_y_train)
             
             try:
