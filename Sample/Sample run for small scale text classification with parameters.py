@@ -21,9 +21,8 @@ X_train, X_test, y_train, y_test =  EMC.train_test_split(y=orig_df['label'], ret
 classifer = EMC.train_model(max_feat=850, inverse_regularisation=30, Tf_Idf=False)
 y_pred, y_pred_prob, performance_metrics = EMC.test_model_on_dev()
 avg_acc = EMC.cross_validation(num_folds=10)
-final_classifer = EMC.save_model(AreYouSure=True)
-#-------------------Run only if you would like to save the model, by default AreYouSure parameter is set to False
-#EMC.save_model(AreYouSure=True)
+final_classifer = EMC.save_model(AreYouSure=True, IncludeTestData=True)
+
 
 #Prediction from model - Change orig_df['text'] with the new data
 data_pred_path = r"F:\Work\Upwork\Music Text Entity Matching\labels.xlsx"

@@ -256,7 +256,7 @@ class Classification_model():
 
     #Save model function runs only when model_training is set to True during class initialization. AreYouSure parameter is by default 
     #set to False, please update to True if save is required. Model name and folder location can also be changed
-    def save_model(self, AreYouSure:bool=False, ModelLocation:str='', ModelName:str = 'ClassifierMultiRetrained', train_on_test_set = True):
+    def save_model(self, AreYouSure:bool=False, ModelLocation:str='', ModelName:str = 'ClassifierMultiRetrained', IncludeTestData = True):
         if self.model_training == True:
             if AreYouSure == True:
                 try:
@@ -265,8 +265,8 @@ class Classification_model():
                 except:
                     raise TypeError("\033[0;31mPipeline not created, make sure training process was completed")
                     
-                if train_on_test_set == True:
-                    self.Log_pipeline_final = self.Log_pipeline.fit(self.temp_X_test, self.temp_y_test)
+                if IncludeTestData == True:
+                    self.Log_pipeline_final = self.Log_pipeline.fit(self.X, self.y)
                 else:
                     self.Log_pipeline_final = self.Log_pipeline
                     

@@ -6,7 +6,7 @@ import pandas as pd
 import win32com.client
 xlapp = win32com.client.Dispatch("Excel.Application")
  
- 
+
 #Uploading labelled data to python, please ensure your data file has only two columns 1) Document's text and 2) Label
 #In case there are multiple text columns that need to be used, please concatenate them in excel in one column
 data_file = r"--Enter data file path---"
@@ -33,7 +33,7 @@ EMC.cross_validation(num_folds=10)
 #*********If you are  happy with model performance, then below code can be run to save the model
 #**By default model will be saved to Classifier Pickles folder in base git repo directory
 #**Ensure to updateAreyouSure to True before running code if you really want to save the model
-EMC.save_model(AreYouSure=False)
+EMC.save_model(AreYouSure=True, IncludeTestData=True)
 
 #*********Prediction can be done using below function and passing it the new unlabeled text data as input
 EMC_P = Classification_model(Texts=orig_df['text'], model_training=False)
